@@ -189,7 +189,6 @@ class _Register2State extends State<Register2> {
                             firstName: firstNameController.text,
                             lastName: lastNameController.text,
                             username: usernameController.text,
-                            description: descriptionController.text,
                             phoneNumber: phoneNumberController.text,
                           ),
                         ),

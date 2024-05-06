@@ -9,6 +9,9 @@ import 'package:my_event_app/pages/register.dart';
 import 'package:provider/provider.dart';
 import 'package:my_event_app/pages/addEvent3.dart';
 import 'package:my_event_app/pages/register.dart';
+import 'package:my_event_app/pages/sumary_screen.dart';
+
+
 
 
 void main() => runApp(

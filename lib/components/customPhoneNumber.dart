@@ -6,7 +6,8 @@ import 'package:my_event_app/components/password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Importez cette bibliothèque pour utiliser les formatters
 
-class CustomPhoneinput extends StatelessWidget {
+
+class CustomPhoneinput extends StatefulWidget {
   final String hintText;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
@@ -23,19 +24,39 @@ class CustomPhoneinput extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _CustomPhoneinputState createState() => _CustomPhoneinputState();
+}
+
+class _CustomPhoneinputState extends State<CustomPhoneinput> {
+  late TextEditingController _textEditingController;
+  bool _hasError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _textEditingController = widget.controller ?? TextEditingController();
+    _textEditingController.addListener(() {
+      setState(() {
+        _hasError = _textEditingController.text.length != 10;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
-        controller: controller,
-        obscureText: isPassword,
+        controller: _textEditingController,
+        obscureText: widget.isPassword,
         style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
-        keyboardType: TextInputType.number,        
-        maxLength: 10, // Limite le nombre maximum de caractères à 10
+        keyboardType: TextInputType.number,
+        maxLength: 10,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+          contentPadding:
+              EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: _hasError ? Colors.red : Colors.white),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.white),
@@ -43,15 +64,21 @@ class CustomPhoneinput extends StatelessWidget {
           ),
           filled: true,
           fillColor: Colors.transparent,
-          hintText: hintText,
+          hintText: widget.hintText,
           hintStyle: TextStyle(
             fontSize: 12,
             color: Colors.white,
           ),
-          prefixIcon: prefixIcon,
-          suffixIcon: suffixIcon,
+          prefixIcon: widget.prefixIcon,
+          suffixIcon: widget.suffixIcon,
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
   }
 }

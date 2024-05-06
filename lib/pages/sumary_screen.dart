@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,7 +14,6 @@ class Register3 extends StatefulWidget {
   final String firstName;
   final String lastName;
   final String username;
-  final String description;
   final String phoneNumber;
 
   Register3({
@@ -22,7 +22,6 @@ class Register3 extends StatefulWidget {
     required this.firstName,
     required this.lastName,
     required this.username,
-    required this.description,
     required this.phoneNumber,
   });
 
@@ -45,157 +44,149 @@ class _Register3State extends State<Register3> {
         TextEditingController(text: widget.lastName);
     TextEditingController firstNameController =
         TextEditingController(text: widget.firstName);
-    TextEditingController descriptionController =
-        TextEditingController(text: widget.description);
+    
     TextEditingController phoneNumberController =
         TextEditingController(text: widget.phoneNumber);
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: Color.fromARGB(255, 37, 37, 37),
-      body: Stack(
-        children: [
-          GestureDetector(
-            onTap: () {
-              showImagePickerOption(context);
-            },
-            child: Container(
-              height: size.height * 0.20,
-              decoration: BoxDecoration(
-                color: Color(0xFFF5CEB8),
-                image: DecorationImage(
-                  image: AssetImage("lib/images/bgvide.jpg"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: 0.0),
-          SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 75, 20, 0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Align(
-                    alignment: Alignment(0.0, 0),
-                    child: GestureDetector(
-                      onTap: () {
-                        showImagePickerOption(context);
-                      },
-                      child: Stack(
-                        children: [
-                          _image != null
-                              ? Container(
-                                  height: 80,
-                                  width: 80,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black26,
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      image: MemoryImage(_image!),
-                                      fit: BoxFit.fitWidth,
-                                    ),
-                                  ),
-                                )
-                              : Container(
-                                  height: 80,
-                                  width: 80,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black26,
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                          "lib/images/inconu2.png"),
-                                    ),
-                                  ),
-                                ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildTextFieldWithLabel(
-                            'Nom', firstNameController),
-                      ),
-                      SizedBox(width: 3.0),
-                      Expanded(
-                        child: _buildTextFieldWithLabel(
-                            'Prénom', lastNameController),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8.0),
-                  _buildTextFieldWithLabel('username', userNameController),
-                  SizedBox(height: 8.0),
-                  _buildTextFieldWithLabel('Email', emailController),
-                  SizedBox(height: 8.0),
-                  _buildTextFieldWithLabel(
-                      'Description', descriptionController),
-                  SizedBox(height: 8.0),
-                  _buildTextFieldWithLabel(
-                      'Numéro de téléphone', phoneNumberController),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              color: Colors.indigo[900],
-                            ),
-                            child: Icon(
-                              Icons.arrow_back,
-                              size: 60,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 20.0),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            signAnimation(context);
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 20,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.indigo[900],
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                "Sign In",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+      body: SafeArea(
+        child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height*0.35,
+                  width: MediaQuery.of(context).size.width*1,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children:[
+                        Container(
+                              child: GestureDetector(
+                                onTap: () {
+                                  showImagePickerOption(context);
+                                },
+                                child: Stack(
+                                  children: [
+                                    _image != null
+                                        ? Container(
+                                            height: 120,
+                                            width: 120,
+                                            decoration: BoxDecoration(
+                                              color: Colors.black26,
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                image: MemoryImage(_image!),
+                                                fit: BoxFit.fitWidth,
+                                              ),
+                                            ),
+                                          )
+                                        : Container(
+                                            height: 120,
+                                            width: 120,
+                                            decoration: BoxDecoration(
+                                              color: Colors.black26,
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                    "lib/images/inconu2.png"),
+                                              ),
+                                            ),
+                                          ),
+                                  ],
                                 ),
                               ),
                             ),
+        
+                    
+                      ] 
+                    ),
+                  ),
+                        
+                ),
+                Divider(
+                  color: Colors.grey.shade800,
+                  
+                ), 
+                SizedBox(height: 30,),
+               Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20 , vertical: 30),
+                 child: Container(
+                            child:TextField(
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w200 , fontStyle: FontStyle.italic,),
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+                              border: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white),
+                              ),
+                              hintText: "Nom de l'organisation",
+                              filled: true,
+                              fillColor: Colors.transparent,
+                              hintStyle: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey.shade100, // Changer la couleur du texte d'indicatif de saisie
+                                fontStyle: FontStyle.italic, // Ajouter un style italic au texte d'indicatif de saisie
+                                fontWeight: FontWeight.w400, // Ajouter un style bold au texte d'indicatif de saisie
+                              ),
+                            ),
+                          )
+                      
+                   
+                 ),
+               ),
+                            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20 , vertical: 15),
+                 child: Container(
+                      child: TextField(
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w200 , fontStyle: FontStyle.italic,),
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          hintText: "Description de l'organisation",
+                          filled: true,
+                          fillColor: Colors.transparent,
+                          hintStyle: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade100, // Changer la couleur du texte d'indicatif de saisie
+                            fontStyle: FontStyle.italic, // Ajouter un style italic au texte d'indicatif de saisie
+                            fontWeight: FontWeight.w400, // Ajouter un style bold au texte d'indicatif de saisie
                           ),
                         ),
-                      )
-                    ],
+                        maxLines: null, // ou une valeur supérieure à 1
+                      ),
+                    )
+
+               ),
+               SizedBox(height: 80),
+               GestureDetector(
+                    onTap: (){},
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 0 , vertical: 15),
+                      margin: const EdgeInsets.symmetric(horizontal: 50),
+                      decoration: BoxDecoration(
+                        color: Colors.indigo[900],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Sign In",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
                   )
-                ],
-              ),
+              ],
             ),
           ),
-        ],
       ),
+      
     );
   }
 

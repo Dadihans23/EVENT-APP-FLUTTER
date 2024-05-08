@@ -1,39 +1,66 @@
-// import 'package:flutter/material.dart';
-// import 'package:video_player/video_player.dart';
-// import 'dart:io';
-// class DisplayVideoScreen extends StatelessWidget {
-//   final File? videoFile;
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:my_event_app/pages/home_page.dart';
+import 'package:my_event_app/components/descriptionrow.dart';
 
-//   const DisplayVideoScreen({
-//     Key? key,
-//     this.videoFile,
-//   }) : super(key: key);
+class test extends StatelessWidget {
+  const test({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Vidéo Sélectionnée"),
-//       ),
-//       body: Center(
-//         child: videoFile != null
-//             ? AspectRatio(
-//                 aspectRatio: 16 / 9,
-//                 child: _initializeVideoPlayer(),
-//               )
-//             : Text("Aucune vidéo sélectionnée"),
-//       ),
-//     );
-//   }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 37, 37, 37),
+     
+      body: SafeArea(
+        child: Column(
+          children: [
+            Center(
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 30),
+                color: Colors.amber,
+                  height: MediaQuery.of(context).size.height*0.5,
+                  width: MediaQuery.of(context).size.width*1,
+                  child:SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 100, 
+                            width: 100,
+                            color: Colors.red,
+                          ),
+                          Container(
+                            height: 100, 
+                            width: 100,
+                            color: Colors.green,
+                          ),
+                          Container(
+                            height: 100, 
+                            width: 100,
+                            color: Colors.blue,
+                          ),
+                          Container(
+                            height: 100, 
+                            width: 100,
+                            color: Colors.red,
+                          ),Container(
+                            height: 100, 
+                            width: 100,
+                            color: Colors.brown,
+                          ),
+                        ],
+                      ),
+              ), 
+              ),
+            ),
+          
+            
+          ],
+        ),
 
-//   Widget _initializeVideoPlayer() {
-//     final videoController = VideoPlayerController.file(videoFile!);
-//     final chewieController = ChewieController(
-//       videoPlayerController: videoController,
-//       autoPlay: true,
-//       looping: true,
-//     );
-
-//     return Chewie(controller: chewieController);
-//   }
-// }
+      )
+    ) ;
+  }
+}

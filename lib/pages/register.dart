@@ -221,7 +221,7 @@ class _registerState extends State<register> {
   Navigator.push(
     context,
     PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => Register3(
+      pageBuilder: (context, animation, secondryAnimation) => Register3(
         email: _emailController.text,
         password: _passwordController.text,
         firstName: _nameController.text,
@@ -239,7 +239,8 @@ class _registerState extends State<register> {
         );
       },
     ),
-  );}
+  )
+  ;}
 
 
 void _showErrorDialog(String message) {

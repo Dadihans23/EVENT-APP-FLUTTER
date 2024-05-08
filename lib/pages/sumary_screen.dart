@@ -162,7 +162,23 @@ class _Register3State extends State<Register3> {
                ),
                SizedBox(height: 80),
                GestureDetector(
-                    onTap: (){},
+                    onTap: (){
+                       Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondryAnimation) => HomePage(
+                       
+                        ),
+                        transitionDuration: Duration(milliseconds: 400),
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                    },
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 0 , vertical: 15),
                       margin: const EdgeInsets.symmetric(horizontal: 50),

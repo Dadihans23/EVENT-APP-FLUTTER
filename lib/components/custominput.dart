@@ -19,12 +19,12 @@ class CustomTextinput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8 , horizontal: 5),
+      padding: const EdgeInsets.symmetric(vertical: 5 , horizontal: 5),
       child: TextFormField(
         controller: controller,
         style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+          contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
           enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.white),
           ),

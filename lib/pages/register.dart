@@ -10,6 +10,8 @@ import 'package:my_event_app/components/custominput.dart';
 import 'package:my_event_app/components/custompassword.dart';
 import 'package:my_event_app/components/customPhoneNumber.dart';
 import 'package:my_event_app/pages/sumary_screen.dart';
+import 'package:my_event_app/pages/login.dart';
+
 
 
 
@@ -41,137 +43,165 @@ class _registerState extends State<register> {
     return Scaffold(
             backgroundColor: Color.fromARGB(255, 37, 37, 37),
             body: SafeArea(
-              child: SingleChildScrollView( 
-                    child: Column( 
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children:[
-                           SingleChildScrollView(
-                              // physics: BouncingScrollPhysics(),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 15),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(height: 30,),
-                                      Container(
-                                        child: Text("creer votre compte" , 
-                                                style: TextStyle(
-                                                      color: Colors.indigo[900],
-                                                      letterSpacing: 0.5,
-                                                      fontSize: 22 ,
-                                                      fontWeight: FontWeight.bold,
-                                                      decorationStyle: TextDecorationStyle.double,
-                                                      ),
-                                                ),
-                                      ),
-                                      SizedBox(height: 12,),
-                                      Container(
-                                          child: Text(
-                                            "Fill in the following information to create your account",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 13.0,
-                                              fontWeight: FontWeight.bold,
-                                              fontStyle: FontStyle.italic,
-                                              letterSpacing: 0.4,
-                                              decorationStyle: TextDecorationStyle.double,
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(height: 20,),
+              child: Container(
+                child: SingleChildScrollView( 
+                  physics:BouncingScrollPhysics(),
+                      child: Column( 
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children:[
+                             SingleChildScrollView(
+                                // physics: BouncingScrollPhysics(),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 15),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(height: 30,),
                                         Container(
-                                          child: Form(
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Expanded(child:CustomTextinput(
-                                                      hintText: 'nom',
-                                                      prefixIcon: null,
-                                                      controller: _nameController,
-                                                    )
-                                                    ),
-                                                    SizedBox(width: 10,),
-                                                    Expanded(child:CustomTextinput(
-                                                      hintText: 'prenom',
-                                                      prefixIcon: null,
-                                                      controller: _surnameController,
-                                            
-                                                    )
-                                                    ),
-                                                  ],
-                                                ) ,
-                                                CustomTextinput(
-                                                  hintText: 'entrez votre username',
-                                                  prefixIcon: Icon(Icons.person),
-                                                 controller: _usernameController,
-                                            
-                                                ),
-                                                CustomTextinput(
-                                                  hintText: "entrez votre email",
-                                                  prefixIcon: Icon(Icons.email),
-                                                  controller: _emailController,
-                                            
-                                            
-                                                ),
-                                                
-                                            
-                                                    CustomPhoneinput(
-                                                      hintText: 'entrez votre numero de telephone',
-                                                      prefixIcon: Icon(Icons.phone),
-                                                     controller: _phoneController,
-                                                    ),
-                                                
-                                                 PasswordTextField(
-                                                  controller: _passwordController,
-                                                  hintText: 'Mot de passe',
-                                                  suffixIconData: Icons.visibility,
-                                                  prefixIcon: Icon(Icons.password_rounded),
-                                            
-                                                  
-                                                ),
-                                                 PasswordTextField(
-                                                  controller: _confirmPasswordController,
-                                                  hintText: 'Mot de passe',
-                                                  suffixIconData: Icons.visibility,
-                                                  prefixIcon: Icon(Icons.password_rounded),
-                                                ),
-                                                
-                                            
-                                              ],
+                                          child: Text("creer votre compte" , 
+                                                  style: TextStyle(
+                                                        color: Colors.indigo[900],
+                                                        letterSpacing: 0.5,
+                                                        fontSize: 22 ,
+                                                        fontWeight: FontWeight.bold,
+                                                        decorationStyle: TextDecorationStyle.double,
+                                                        ),
+                                                  ),
+                                        ),
+                                        SizedBox(height: 12,),
+                                        Container(
+                                            child: Text(
+                                              "Remplissez vos informations",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 13.0,
+                                                fontWeight: FontWeight.bold,
+                                                fontStyle: FontStyle.italic,
+                                                letterSpacing: 0.4,
+                                                decorationStyle: TextDecorationStyle.double,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        
-                                    ],
+                                          SizedBox(height: 15,),
+                                          Container(
+                                            child: Form(
+                                              child: Column(
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Expanded(child:CustomTextinput(
+                                                        hintText: 'nom',
+                                                        prefixIcon: null,
+                                                        controller: _nameController,
+                                                      )
+                                                      ),
+                                                      SizedBox(width: 10,),
+                                                      Expanded(child:CustomTextinput(
+                                                        hintText: 'prenom',
+                                                        prefixIcon: null,
+                                                        controller: _surnameController,
+                                              
+                                                      )
+                                                      ),
+                                                    ],
+                                                  ) ,
+                                                  CustomTextinput(
+                                                    hintText: 'entrez votre username',
+                                                    prefixIcon: Icon(Icons.person),
+                                                   controller: _usernameController,
+                                              
+                                                  ),
+                                                  CustomTextinput(
+                                                    hintText: "entrez votre email",
+                                                    prefixIcon: Icon(Icons.email),
+                                                    controller: _emailController,
+                                              
+                                              
+                                                  ),
+                                                  
+                                              
+                                                      CustomPhoneinput(
+                                                        hintText: 'entrez votre numero de telephone',
+                                                        prefixIcon: Icon(Icons.phone),
+                                                       controller: _phoneController,
+                                                      ),
+                                                  
+                                                   PasswordTextField(
+                                                    controller: _passwordController,
+                                                    hintText: 'Mot de passe',
+                                                    suffixIconData: Icons.visibility,
+                                                    prefixIcon: Icon(Icons.password_rounded),
+                                              
+                                                    
+                                                  ),
+                                                   PasswordTextField(
+                                                    controller: _confirmPasswordController,
+                                                    hintText: 'Mot de passe',
+                                                    suffixIconData: Icons.visibility,
+                                                    prefixIcon: Icon(Icons.password_rounded),
+                                                  ),
+                                                  
+                                              
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            SizedBox(height: 15,),
-                        
-                            GestureDetector(
-                              onTap: _registerUser,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 0 , vertical: 15),
-                                margin: const EdgeInsets.symmetric(horizontal: 50),
-                                decoration: BoxDecoration(
-                                  color: Colors.indigo[900],
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    "Sign In",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
+                              SizedBox(height: 15,),
+                          
+                              GestureDetector(
+                                onTap: _registerUser,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 0 , vertical: 15),
+                                  margin: const EdgeInsets.symmetric(horizontal: 50),
+                                  decoration: BoxDecoration(
+                                    color: Colors.indigo[900],
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      "Sign In",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            )
-                        ]
-                      ),
+                              SizedBox(height: 15,),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Divider(
+                                      thickness: 0.5,
+                                      color: Colors.grey.shade500,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()) );
+                                    },
+                                    child: Container(
+                                      child: Text("deja un compte ?" ,style: TextStyle(color: Colors.grey.shade300 , fontSize: 12 , fontWeight:FontWeight.w600),),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Divider(
+                                      thickness: 0.5,
+                                      color: Colors.grey.shade500,
+                                    ),
+                                  )
+                                ],
+                              ),
+                          ]
+                        ),
+                ),
               ),
             )
                     

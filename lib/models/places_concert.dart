@@ -48,3 +48,4 @@ List<ConcertPlace> concertPlaces = [
   ConcertPlace(place: "Gare du Bassam", commune: "Grand-Bassam", ville: "Grand-Bassam"),
   ConcertPlace(place: "Place Gouro", commune: "Cocody", ville: "Abidjan"),
 ];
+

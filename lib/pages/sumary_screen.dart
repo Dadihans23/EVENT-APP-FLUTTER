@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,24 +31,20 @@ class Register3 extends StatefulWidget {
   _Register3State createState() => _Register3State();
 }
 
+   final TextEditingController _organisationController = TextEditingController();
+   final TextEditingController _descriptionController = TextEditingController();  
+   
+
 class _Register3State extends State<Register3> {
   Uint8List? _image;
   File? selectedImage;
 
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    TextEditingController emailController =
-        TextEditingController(text: widget.email);
-    TextEditingController userNameController =
-        TextEditingController(text: widget.username);
-    TextEditingController lastNameController =
-        TextEditingController(text: widget.lastName);
-    TextEditingController firstNameController =
-        TextEditingController(text: widget.firstName);
-    
-    TextEditingController phoneNumberController =
-        TextEditingController(text: widget.phoneNumber);
+   
+  
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -114,6 +112,7 @@ class _Register3State extends State<Register3> {
                 padding: EdgeInsets.symmetric(horizontal: 20 , vertical: 30),
                  child: Container(
                             child:TextField(
+                              controller:_organisationController ,
                             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w200 , fontStyle: FontStyle.italic,),
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
@@ -139,6 +138,7 @@ class _Register3State extends State<Register3> {
                 padding: EdgeInsets.symmetric(horizontal: 20 , vertical: 15),
                  child: Container(
                       child: TextField(
+                        controller: _descriptionController,
                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.w200 , fontStyle: FontStyle.italic,),
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
@@ -162,23 +162,7 @@ class _Register3State extends State<Register3> {
                ),
                SizedBox(height: 80),
                GestureDetector(
-                    onTap: (){
-                       Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation, secondryAnimation) => HomePage(
-                       
-                        ),
-                        transitionDuration: Duration(milliseconds: 400),
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: child,
-                          );
-                        },
-                      ),
-                    );
-                    },
+                    onTap: _createuser,
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 0 , vertical: 15),
                       margin: const EdgeInsets.symmetric(horizontal: 50),
@@ -188,7 +172,7 @@ class _Register3State extends State<Register3> {
                       ),
                       child: const Center(
                         child: Text(
-                          "Sign In",
+                          " ddd",
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -204,7 +188,140 @@ class _Register3State extends State<Register3> {
       ),
       
     );
+    
   }
+
+  void _createuser() async{
+    String description = _descriptionController.text;
+    String nom_organisation = _organisationController.text;
+    String email = widget.email;
+    String username = widget.username;
+    String prenom = widget.lastName;
+    String nom = widget.firstName;
+    String telephone = widget.phoneNumber;
+    String password = widget.password;
+
+  print('Name: $nom');
+  print('Surname: $prenom');
+  print('Username: $username');
+  print('Email: $email');
+  print('Phone: $telephone');
+  print('Password: $password');
+  print('nom_organisation: $nom_organisation');
+  print('description: $description');
+
+
+  if (description.isEmpty || nom_organisation.isEmpty ){
+    _showErrorDialog("Veuillez remplir tous les champs.");
+    return;
+  }
+   Map<String, dynamic> requestBody = {
+    'email': "dadi@gmail.com",
+    'username': "hooo",
+    'password': "12345678",
+    'nom': nom,
+    'prenom': prenom,
+    'nom_organisation': nom_organisation,
+    'description': description,
+    'telephone': "0151655248",
+
+  };
+
+//   {
+//     "email": "test@example.com",
+//     "username": "test_user",
+//     "password": "password123",
+//     "nom": "Nom",
+//     "prenom": "Prénom",
+//     "nom_organisation": "Organisation XYZ",
+//     "description": "Description de l'organisation",
+//     "telephone": "1234567890"
+// }
+
+
+  // Convertir le corps de la requête en JSON
+  String jsonBody = json.encode(requestBody);
+  
+
+  // Définir l'URL de ton API Django
+  String apiUrl = 'http://127.0.0.1:8000/users/Register_organizer/';
+
+  try {
+    // Effectuer la requête POST
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonBody,
+    );
+
+    // Vérifier si la requête a réussi (code de statut 200)
+    if (response.statusCode == 200) {
+      // Traitement en cas de succès
+
+      Map<String, dynamic> jsonResponse = json.decode(response.body);
+
+      String token = jsonResponse['token'];
+
+      print('Token: $token');
+
+
+      Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondryAnimation) => HomePage(
+        
+          
+        ),
+        transitionDuration: Duration(milliseconds: 400),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+      ),
+    );
+
+    } else {
+      // Traitement en cas d'échec
+      print('Échec de l\'inscription. Code de statut: ${response.statusCode}');
+    }
+  } catch (error) {
+    // cas d'erreurs
+    print('Erreur lors de la requête POST: $error');
+  }
+
+  // Toutes les vérifications sont passées, continuer avec le traitement des données
+
+  // Enregistrer l'utilisateur, etc.
+  
+ }
+
+
+void _showErrorDialog(String message) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+         shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        title: Text("Erreur"  , style :TextStyle( color: Colors.indigo[900] , fontSize: 18, fontWeight:FontWeight.bold),),
+        content: Text(message , style: TextStyle(color: Colors.black , fontSize: 14, fontWeight:FontWeight.w700),),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("OK"),
+          ),
+        ],
+      );
+    },
+  );
+}
 
   Widget _buildTextFieldWithLabel(
       String label, TextEditingController controller) {

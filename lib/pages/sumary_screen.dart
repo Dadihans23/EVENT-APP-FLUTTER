@@ -191,114 +191,58 @@ class _Register3State extends State<Register3> {
     
   }
 
-  void _createuser() async{
-    String description = _descriptionController.text;
-    String nom_organisation = _organisationController.text;
-    String email = widget.email;
-    String username = widget.username;
-    String prenom = widget.lastName;
-    String nom = widget.firstName;
-    String telephone = widget.phoneNumber;
-    String password = widget.password;
 
-  print('Name: $nom');
-  print('Surname: $prenom');
-  print('Username: $username');
-  print('Email: $email');
-  print('Phone: $telephone');
-  print('Password: $password');
-  print('nom_organisation: $nom_organisation');
-  print('description: $description');
+void _createuser() async {
+  String description = _descriptionController.text;
+  String nom_organisation = _organisationController.text;
+  String email = widget.email;
+  String username = widget.username;
+  String prenom = widget.lastName;
+  String nom = widget.firstName;
+  String telephone = widget.phoneNumber;
+  String password = widget.password;
 
+  // Création d'un objet de requête multipart
+  var request = http.MultipartRequest('POST', Uri.parse('http://192.168.239.151:8000/users/Register_organizer/'));
 
-  if (description.isEmpty || nom_organisation.isEmpty ){
-    _showErrorDialog("Veuillez remplir tous les champs.");
-    return;
+  // Ajout des données texte à la requête
+  request.fields['description'] = description;
+  request.fields['nom_organisation'] = nom_organisation;
+  request.fields['email'] = email;
+  request.fields['username'] = username;
+  request.fields['prenom'] = prenom;
+  request.fields['nom'] = nom;
+  request.fields['telephone'] = telephone;
+  request.fields['password'] = password;
+
+  // Ajout de l'image à la requête si elle a été sélectionnée
+if (selectedImage != null) {
+  bool fileExists = await selectedImage!.exists();
+  if (fileExists) {
+    var image = await http.MultipartFile.fromPath('image', selectedImage!.path);
+    request.files.add(image);
+  } else {
+    print('Fichier image invalide ou introuvable.');
   }
-   Map<String, dynamic> requestBody = {
-    'email': "dadi@gmail.com",
-    'username': "hooo",
-    'password': "12345678",
-    'nom': nom,
-    'prenom': prenom,
-    'nom_organisation': nom_organisation,
-    'description': description,
-    'telephone': "0151655248",
-
-  };
-
-//   {
-//     "email": "test@example.com",
-//     "username": "test_user",
-//     "password": "password123",
-//     "nom": "Nom",
-//     "prenom": "Prénom",
-//     "nom_organisation": "Organisation XYZ",
-//     "description": "Description de l'organisation",
-//     "telephone": "1234567890"
-// }
-
-
-  // Convertir le corps de la requête en JSON
-  String jsonBody = json.encode(requestBody);
-  
-
-  // Définir l'URL de ton API Django
-  String apiUrl = 'http://127.0.0.1:8000/users/Register_organizer/';
-
+} else {
+  print('Aucune image sélectionnée.');
+}
+  // Envoi de la requête et gestion de la réponse
   try {
-    // Effectuer la requête POST
-    final response = await http.post(
-      Uri.parse(apiUrl),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonBody,
-    );
-
-    // Vérifier si la requête a réussi (code de statut 200)
+    var response = await request.send();
     if (response.statusCode == 200) {
-      // Traitement en cas de succès
-
-      Map<String, dynamic> jsonResponse = json.decode(response.body);
-
-      String token = jsonResponse['token'];
-
-      print('Token: $token');
-
-
-      Navigator.push(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondryAnimation) => HomePage(
-        
-          
-        ),
-        transitionDuration: Duration(milliseconds: 400),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(
-            opacity: animation,
-            child: child,
-          );
-        },
-      ),
-    );
+      // Réponse réussie, traiter la réponse ici
+            print('inscription reussie');
 
     } else {
-      // Traitement en cas d'échec
-      print('Échec de l\'inscription. Code de statut: ${response.statusCode}');
+      // Gérer les erreurs de la réponse
+      print('Erreur lors de la requête: ${response.statusCode}');
     }
-  } catch (error) {
-    // cas d'erreurs
-    print('Erreur lors de la requête POST: $error');
+  } catch (e) {
+    // Gérer les erreurs de connexion
+    print('Erreur de connexion: $e');
   }
-
-  // Toutes les vérifications sont passées, continuer avec le traitement des données
-
-  // Enregistrer l'utilisateur, etc.
-  
- }
-
+}
 
 void _showErrorDialog(String message) {
   showDialog(
@@ -363,6 +307,32 @@ void _showErrorDialog(String message) {
     );
   }
 
+ 
+
+  Future _pickImageFromGallery() async {
+    final returnImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returnImage == null) return;
+    setState(() {
+      selectedImage = File(returnImage.path);
+      _image = File(returnImage.path).readAsBytesSync();
+    });
+    Navigator.of(context).pop(); //close the model sheet
+  }
+
+  //Camera
+  Future _pickImageFromCamera() async {
+    final returnImage =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    if (returnImage == null) return;
+    setState(() {
+      selectedImage = File(returnImage.path);
+      _image = File(returnImage.path).readAsBytesSync();
+    });
+    Navigator.of(context).pop();
+  }
+
+
   void showImagePickerOption(BuildContext context) {
     showModalBottomSheet(
       backgroundColor: Colors.indigo[800],
@@ -422,8 +392,8 @@ void _showErrorDialog(String message) {
 
     );
   }
-  
-  void signAnimation(BuildContext context) {
+
+   void signAnimation(BuildContext context) {
     // Afficher le widget CircularProgressIndicator pendant 3 secondes
     showModalBottomSheet(
       backgroundColor: Colors.indigo[800],
@@ -470,27 +440,5 @@ void _showErrorDialog(String message) {
       );
     });
   }
-
-  Future _pickImageFromGallery() async {
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returnImage == null) return;
-    setState(() {
-      selectedImage = File(returnImage.path);
-      _image = File(returnImage.path).readAsBytesSync();
-    });
-    Navigator.of(context).pop(); //close the model sheet
-  }
-
-  //Camera
-  Future _pickImageFromCamera() async {
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-    if (returnImage == null) return;
-    setState(() {
-      selectedImage = File(returnImage.path);
-      _image = File(returnImage.path).readAsBytesSync();
-    });
-    Navigator.of(context).pop();
-  }
+  
 }

@@ -245,9 +245,9 @@ class _registerState extends State<register> {
   // Toutes les vérifications sont passées, continuer avec le traitement des données
 
    Map<String, dynamic> requestBody = {
-    'email': "dadi@gmail.com",
-    'username': "hooo",
-    'telephone': "0151655248",
+    'email': email,
+    'username': username,
+    'telephone': phone,
   };
 
 //   {
@@ -257,66 +257,68 @@ class _registerState extends State<register> {
 // }
 
   // Convertir le corps de la requête en JSON
-  String jsonBody = json.encode(requestBody);
   
-  // Définir l'URL de ton API Django
-  String apiUrl = 'http://127.0.0.1:8000/users/Check_existing_organizer/';
-
-  try {
-    // Effectuer la requête POST
-    final response = await http.post(
-      Uri.parse(apiUrl),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonBody,
-    );
-       
-    Map<String, dynamic> jsonResponse = json.decode(response.body);
-
-    // Vérifier si la requête a réussi (code de statut 200)
-    if (response.statusCode == 200) {
-      // Traitement en cas de succès
-
-      Navigator.push(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondryAnimation) => Register3(
-          email: _emailController.text,
-          password: _passwordController.text,
-          firstName: _nameController.text,
-          lastName: _surnameController.text,
-          username: _usernameController.text,
-          phoneNumber: _phoneController.text,
-
-          
-        ),
-        transitionDuration: Duration(milliseconds: 400),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(
-            opacity: animation,
-            child: child,
-          );
-        },
-      ),
-    );
-
-    } else {
-      // Traitement en cas d'échec
-      print('Échec de l\'inscription. Code de statut: ${response.statusCode}');
-      String message = jsonResponse['email'];
-      
-      _showErrorDialog(message);
-
-    }
-  } catch (error) {
-    // cas d'erreurs
-    print('Erreur lors de la requête POST: $error');
-  }
+String jsonBody = json.encode(requestBody);
+  
+// Définir l'URL de ton API Django
+String apiUrl = 'http://192.168.239.151:8000/users/Check_existing_organizer/';
 
   // Enregistrer l'utilisateur, etc.
+
+try {
+  // Effectuer la requête POST
+  final response = await http.post(
+    Uri.parse(apiUrl),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonBody,
+  );
+     
+  // Décode la réponse en tant que JSON en spécifiant l'encodage des caractères
+  Map<String, dynamic> jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+
+  // Vérifier si la requête a réussi (code de statut 200)
+  if (response.statusCode == 200) {
+    // Vérifier si la réponse de l'API contient "success" à true
+    if (jsonResponse['success'] == true) {
+      print("permier etape bien recu");
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondryAnimation) => Register3(
+            email: _emailController.text,
+            password: _passwordController.text,
+            firstName: _nameController.text,
+            lastName: _surnameController.text,
+            username: _usernameController.text,
+            phoneNumber: _phoneController.text,
+          ),
+          transitionDuration: Duration(milliseconds: 400),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        ),
+      );
+    } else {
+      // Afficher le message d'erreur de l'API
+      _showErrorDialog(jsonResponse['message']);
+    }
+  } else {
+    // Traitement en cas d'échec
+    print('Échec de l\'inscription. Code de statut: ${response.statusCode}');
+  }
+} catch (error) {
+  // cas d'erreurs
+  print('Erreur lors de la requête POST: $error');
+}
+
  
-  ;}
+  ;
+  }
 
 
 void _showErrorDialog(String message) {

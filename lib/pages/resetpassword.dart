@@ -4,6 +4,14 @@ import 'package:my_event_app/pages/login.dart';
 import'package:my_event_app/pages/newpassword.dart';
 
 
+import 'package:flutter/services.dart';
+import 'package:uni_links/uni_links.dart';
+import 'dart:async';
+
+
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 class resetpassword extends StatefulWidget {
   const resetpassword({super.key});
 
@@ -13,6 +21,15 @@ class resetpassword extends StatefulWidget {
   final TextEditingController _emailController = TextEditingController();
 
 class _resetpasswordState extends State<resetpassword> {
+
+  StreamSubscription? _sub;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,9 +129,7 @@ class _resetpasswordState extends State<resetpassword> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   child: GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Newpassword()));
-                  },
+                  onTap: _sendResetPasswordLink,
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 0 , vertical: 15),
                     margin: const EdgeInsets.symmetric(horizontal: 50),
@@ -177,4 +192,150 @@ class _resetpasswordState extends State<resetpassword> {
 
     );
   }
+  
+  void _sendResetPasswordLink() async {
+  String email = _emailController.text.trim();
+
+
+  // Débogage : Afficher les valeurs des champs
+
+
+  if ( email.isEmpty){
+    _showErrorDialog("Veuillez remplir tous les champs.");
+    return;
+  }
+
+  // Vérification du format de l'email
+  RegExp emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  if (!emailRegExp.hasMatch(email)) {
+    _showErrorDialog("Veuillez entrer une adresse email valide.");
+    return;
+  }
+
+  // Toutes les vérifications sont passées, continuer avec le traitement des données
+
+   Map<String, dynamic> requestBody = {
+    'email': email,
+  };
+
+//   {
+//     "email": "test@example.com",
+//     "username": "test_user",
+//     "telephone": "1234567890"
+// }
+
+  // Convertir le corps de la requête en JSON
+  
+String jsonBody = json.encode(requestBody);
+  
+// Définir l'URL de ton API Django
+String apiUrl = 'http://192.168.0.142:8000/users/forgotPassword/';
+
+  // Enregistrer l'utilisateur, etc.
+
+try {
+  // Effectuer la requête POST
+  final response = await http.post(
+    Uri.parse(apiUrl),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonBody,
+  );
+     
+  // Décode la réponse en tant que JSON en spécifiant l'encodage des caractères
+  Map<String, dynamic> jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+
+  // Vérifier si la requête a réussi (code de statut 200)
+  if (response.statusCode == 200) {
+    // Vérifier si la réponse de l'API contient "success" à true
+    if (jsonResponse['success'] == true) {
+        _showSuccessDialog("Un jpoo de réinitialisation de mot de passe a été envoyé.");
+      
+    } else {
+      // Afficher le message d'erreur de l'API
+      _showErrorDialog(jsonResponse['message']);
+    }
+  } 
+  else if (response.statusCode == 404) {
+      _showErrorDialog('Adresse e-mail non trouvée. Veuillez vérifier votre adresse e-mail et réessayer.');
+    } 
+  else {
+    // Traitement en cas d'échec
+    print('Échec de l\'envoie. Code de statut: ${response.statusCode}');
+  }
+} catch (error) {
+  // cas d'erreurs
+  print('Erreur lors de la requête POST: $error');
+}
+
+ 
+  ;
+
+}
+
+
+  
+void _showErrorDialog(String message) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+         shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        title: Text("Erreur"  , style :TextStyle( color: Colors.indigo[900] , fontSize: 18, fontWeight:FontWeight.bold),),
+        content: Text(message , style: TextStyle(color: Colors.black , fontSize: 14, fontWeight:FontWeight.w700),),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("OK"),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
+
+
+  void _showSuccessDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          title: Text("Succès", style: TextStyle(color: Colors.indigo[900], fontSize: 18, fontWeight: FontWeight.bold),),
+          content: Text(message, style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w700),),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) => Newpassword(email: _emailController.text.trim()),
+                    transitionDuration: Duration(milliseconds: 400),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+     }
+
 }

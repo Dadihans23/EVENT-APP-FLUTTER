@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:my_event_app/components/textfield.dart';
+import 'package:my_event_app/pages/home_page.dart';
 import 'package:my_event_app/pages/register2.dart';
 import 'package:my_event_app/components/custominput.dart';
 import 'package:my_event_app/components/custompassword.dart';
@@ -14,6 +17,8 @@ import 'package:my_event_app/pages/login.dart';
 import 'package:my_event_app/pages/register.dart';
 
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -232,7 +237,7 @@ class _LoginState extends State<Login> {
     );
   }
   
-void _connexion() {
+void _connexion() async {
   String email = _emailController.text.trim();
   String password = _passwordController.text.trim();
 
@@ -251,6 +256,68 @@ void _connexion() {
     _showErrorDialog("Veuillez entrer une adresse email valide.");
     return;
   }
+  
+   Map<String, dynamic> requestBody = {
+    'email': email,
+    'password':password
+    
+  };
+
+
+  // Convertir le corps de la requête en JSON
+  
+String jsonBody = json.encode(requestBody);
+  
+// Définir l'URL de ton API Django
+String apiUrl = 'http://192.168.0.142:8000/users/Login_organizer';
+
+  // Enregistrer l'utilisateur, etc.
+
+try {
+  // Effectuer la requête POST
+  final response = await http.post(
+    Uri.parse(apiUrl),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonBody,
+  );
+     
+  // Décode la réponse en tant que JSON en spécifiant l'encodage des caractères
+  Map<String, dynamic> jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+
+  // Vérifier si la requête a réussi (code de statut 200)
+  if (response.statusCode == 200) {
+    // Vérifier si la réponse de l'API contient "success" à true
+    if (jsonResponse['success'] == true) {
+      print("permier etape bien recu");
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondryAnimation) => HomePage(
+        
+          ),
+          transitionDuration: Duration(milliseconds: 400),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        ),
+      );
+    } else {
+      // Afficher le message d'erreur de l'API
+      _showErrorDialog(jsonResponse['message']);
+    }
+  } else {
+    // Traitement en cas d'échec
+    print('Échec de l\'inscription. Code de statut: ${response.statusCode}');
+  }
+} catch (error) {
+  // cas d'erreurs
+  print('Erreur lors de la requête POST: $error');
+}
 
   // Enregistrer l'utilisateur, etc.
 }

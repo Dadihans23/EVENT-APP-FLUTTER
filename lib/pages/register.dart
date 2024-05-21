@@ -20,9 +20,6 @@ import 'package:my_event_app/pages/login.dart';
 
 
 
-
-
-
 class register extends StatefulWidget {
   const register({super.key});
 
@@ -261,7 +258,7 @@ class _registerState extends State<register> {
 String jsonBody = json.encode(requestBody);
   
 // Définir l'URL de ton API Django
-String apiUrl = 'http://192.168.239.151:8000/users/Check_existing_organizer/';
+String apiUrl = 'http://192.168.0.142:8000/users/Check_existing_organizer/';
 
   // Enregistrer l'utilisateur, etc.
 

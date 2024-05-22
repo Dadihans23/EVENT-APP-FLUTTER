@@ -32,8 +32,6 @@ class addEvent2 extends StatefulWidget {
 }
 
 class _addEvent2State extends State<addEvent2> {
-  final _controller = TextEditingController();
-  String _sessionToken = '1234567890';
   Uint8List? _image;
   File? selectedImage;
   File? _videoFile;
@@ -151,8 +149,7 @@ class _addEvent2State extends State<addEvent2> {
                   ),
                 ),
         
-        
-                
+              
                 SizedBox(height: 30),
                
                  Container(
@@ -166,8 +163,6 @@ class _addEvent2State extends State<addEvent2> {
                               Navigator.push(
                                 context , MaterialPageRoute(builder: (context)=> addEvent3(
                                       image: selectedImage,
-                                      // videoFile: _videoFile,
-                                      // videoPlayerController: _videoPlayerController,
                                       eventName: widget.eventName,
                                       eventDescription: widget.eventDescription,
                                       eventDate: widget.eventDate ,
@@ -205,9 +200,6 @@ class _addEvent2State extends State<addEvent2> {
                       ),
                     
                   ),
-        
-        
-        
             ],
           ),
         ),
@@ -405,83 +397,6 @@ class _addEvent2State extends State<addEvent2> {
     Navigator.of(context).pop();
   }
 }
-
-
-
-    // Container(
-    //             child: Column(
-    //               crossAxisAlignment: CrossAxisAlignment.center,
-    //               children: [
-    //                 SizedBox(height: 10),
-    //                 GestureDetector(
-    //                   onTap: () {
-    //                     showVideoPickerOption(context);
-    //                   },
-    //                   child: Container(
-    //                     height: 180,
-    //                     width: 280,
-    //                     decoration: BoxDecoration(
-    //                       borderRadius: BorderRadius.circular(5),
-    //                       color: Colors.white,
-    //                       boxShadow: [
-    //                         BoxShadow(
-    //                           color: Colors.grey,
-    //                           spreadRadius: 1,
-    //                           blurRadius: 15,
-    //                           offset: Offset(0, 1),
-    //                         ),
-    //                       ],
-    //                     ),
-    //                       child: _videoFile != null
-    //                           ? _videoPlayerController!.value.isInitialized
-    //                               ? AspectRatio(
-    //                                   aspectRatio: 16/9,
-    //                                   // aspectRatio: _videoPlayerController!.value.aspectRatio,
-    //                                   child: VideoPlayer(_videoPlayerController!),
-                                      
-    //                                 )
-    //                               : Container()
-    //                           : Center(
-    //                               child: Container(
-    //                                 height: 100,
-    //                                 width: 100,
-    //                                 child: Column(
-    //                                   children: [
-    //                                     Icon(Icons.video_library_rounded, size: 50, color: Colors.black),
-    //                                     Text(
-    //                                       "Cliquez ici",
-    //                                       style: TextStyle(
-    //                                         color: Colors.black,
-    //                                         fontSize: 10,
-    //                                         fontWeight: FontWeight.bold,
-    //                                       ),
-    //                                       textAlign: TextAlign.center,
-    //                                     ),
-    //                                   ],
-    //                                 ),
-    //                               ),
-    //                             ),
-                        
-
-    //                   ),
-    //                 ),
-
-    //                 SizedBox(height: 10),
-    //                 Text(
-    //                   "Vous pouvez uploader une vidéo captivante",
-    //                   style: TextStyle(
-    //                     color: Colors.grey.shade500,
-    //                     fontSize: 12,
-    //                     fontWeight: FontWeight.bold,
-    //                   ),
-    //                   textAlign: TextAlign.center,
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-
-
-
 
 
 

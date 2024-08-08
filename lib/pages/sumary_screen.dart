@@ -10,6 +10,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:my_event_app/pages/sumary_screen.dart';
 import 'package:my_event_app/pages/home_page.dart';
 
+
+import 'package:my_event_app/models/authprovider.dart';
+import 'dart:convert';
+
+import 'package:provider/provider.dart';
+
 class Register3 extends StatefulWidget {
   final String email;
   final String password;
@@ -203,7 +209,7 @@ void _createuser() async {
   String password = widget.password;
 
   // Création d'un objet de requête multipart
-  var request = http.MultipartRequest('POST', Uri.parse('http://192.168.239.151:8000/users/Register_organizer/'));
+  var request = http.MultipartRequest('POST', Uri.parse('http://192.168.0.142:8000/users/Register_organizer/'));
 
   // Ajout des données texte à la requête
   request.fields['description'] = description;
@@ -227,12 +233,26 @@ if (selectedImage != null) {
 } else {
   print('Aucune image sélectionnée.');
 }
+
+final auth = Provider.of<AuthProvider>(context);
+
   // Envoi de la requête et gestion de la réponse
   try {
     var response = await request.send();
+
     if (response.statusCode == 200) {
+
       // Réponse réussie, traiter la réponse ici
             print('inscription reussie');
+            var responseData = await response.stream.bytesToString();
+            var jsonData = json.decode(responseData);
+            
+            // Récupérer le token de la réponse
+            var token = jsonData['token'];
+            print(token);
+            auth.setToken(token);
+
+
 
     } else {
       // Gérer les erreurs de la réponse

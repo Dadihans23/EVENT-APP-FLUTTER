@@ -9,60 +9,38 @@ import 'package:my_event_app/data/ticket_data.dart';
 import 'package:my_event_app/models/tycket_item.dart';
 import 'package:my_event_app/pages/addEventLoc.dart';
 import 'package:my_event_app/pages/addevent4.dart';
-import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 import 'package:video_player/video_player.dart';
-
+import 'package:my_event_app/models/eventmodel.dart';
+import 'package:provider/provider.dart';
 
 class addEvent3 extends StatefulWidget {
+  const addEvent3({Key? key}) : super(key: key);
 
-  final String? eventName;
-  final String? eventDescription;
-  final String? eventDate;
-  final String? eventStartTime;
-  final String? eventEndTime;
-  final String? eventLocation ;
-  final File? image;
-  final File? videoFile;
-  final VideoPlayerController? videoPlayerController;
-
-  addEvent3({
-    this.eventName,
-    this.eventDescription,
-    this.eventDate,
-    this.eventStartTime,
-    this.eventEndTime,
-    this.eventLocation,
-    this.image,
-    this.videoFile,
-    this.videoPlayerController,
-
-  });
   @override
   State<addEvent3> createState() => _addEvent3State();
 }
 
 class _addEvent3State extends State<addEvent3> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-   
   File? _image;
   File? _videoFile;
   VideoPlayerController? _videoPlayerController;
-  List<tycketItem> createdTickets = [];
 
-  
+  final namecontroller = TextEditingController();
+  final pricecontroller = TextEditingController();
+  final quantitycontroller = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    _image = widget.image;
-    _videoFile = widget.videoFile;
-    _videoPlayerController = widget.videoPlayerController;
   }
+
   bool isTicketLimitReached(List<tycketItem> tickets) {
-  return tickets.length >= 3;
-}
-  
+    return tickets.length >= 3;
+  }
+
   void save() {
     if (_formKey.currentState!.validate()) {
       tycketItem tycket = tycketItem(
@@ -71,10 +49,8 @@ class _addEvent3State extends State<addEvent3> {
         quantity: quantitycontroller.text,
       );
       Provider.of<tycketData>(context, listen: false).addtycket(tycket);
-      createdTickets.add(tycket); // Ajouter le ticket créé à la liste
       Navigator.pop(context);
       clear();
-      
     }
   }
 
@@ -83,14 +59,11 @@ class _addEvent3State extends State<addEvent3> {
     clear();
   }
 
-  final namecontroller = TextEditingController();
-  final pricecontroller = TextEditingController();
-  final quantitycontroller = TextEditingController();
-void addNewTycket() {
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-       shape: RoundedRectangleBorder(
+  void addNewTycket() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
         title: Text(
@@ -102,69 +75,71 @@ void addNewTycket() {
             fontWeight: FontWeight.bold,
           ),
         ),
-      content: SingleChildScrollView(
-        child: Form(  // Ajouter Form ici
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: namecontroller,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer un nom';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  hintText: "nom",
-                  hintStyle: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+        content: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: namecontroller,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Veuillez entrer un nom';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    hintText: "nom",
+                    hintStyle: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                  ),
                 ),
-              ),
-              TextFormField(
-                controller: pricecontroller,
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer un prix';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  hintText: "prix",
-                  hintStyle: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                TextFormField(
+                  controller: pricecontroller,
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Veuillez entrer un prix';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    hintText: "prix",
+                    hintStyle: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                  ),
                 ),
-              ),
-              TextFormField(
-                controller: quantitycontroller,
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer une quantité';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  hintText: "quantité",
-                  hintStyle: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                TextFormField(
+                  controller: quantitycontroller,
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Veuillez entrer une quantité';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    hintText: "quantité",
+                    hintStyle: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
+        actions: [
+          MaterialButton(
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                save();
+              }
+            },
+            child: Text("save"),
+          ),
+          MaterialButton(onPressed: cancel, child: Text("cancel")),
+        ],
       ),
-      actions: [
-        MaterialButton(onPressed: () {
-          if (_formKey.currentState!.validate()) { // Vérifier si le Form est valide
-            save();
-          }
-        }, child: Text("save")),  // Appeler save si le Form est valide
-        MaterialButton(onPressed: cancel, child: Text("cancel")),
-      ],
-    ),
-  );
-}
-
+    );
+  }
 
   void clear() {
     namecontroller.clear();
@@ -172,29 +147,108 @@ void addNewTycket() {
     quantitycontroller.clear();
   }
 
+  double calculateNetAmount(double price) {
+    return price * 0.92; // 8% fee means the user receives 92%
+  }
+void showPercentageAlert(List<tycketItem> tickets) {
+  var ticketData = Provider.of<tycketData>(context, listen: false);
+
+  // Vérifier si la liste des tickets est vide
+  if (tickets.isEmpty) {
+    // Si la liste des tickets est vide, l'événement est gratuit et on ne montre pas la boîte de dialogue
+    return;
+  }
+
+  List<String> ticketDetails = tickets.map((ticket) {
+    double price = double.parse(ticket.price);
+    double netAmount = calculateNetAmount(price);
+    return '${ticket.name}: ${netAmount.toStringAsFixed(2)} FCFA';
+  }).toList();
+
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      title: Text(
+        "Montant apres deduction du service ",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.indigo[900],
+          fontSize: 18.0,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ...ticketDetails.map((detail) => Text(detail)).toList(),
+              SizedBox(height: 20),
+              Text(
+                "Un pourcentage de 8% est prélevé sur chaque catégorie de billet.",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.red, fontSize: 12),
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text("Annuler"),
+        ),
+        TextButton(
+          onPressed: () {
+            List<TicketItem> tickets = ticketData.getAlltycket().map((tycket) {
+              return TicketItem(
+                name: tycket.name,
+                price: tycket.price,
+                quantity: tycket.quantity,
+              );
+            }).toList();
+            // Ajouter les tickets convertis à EventModel
+            Provider.of<EventModel>(context, listen: false).addTickets(tickets);
+
+            Navigator.push(context, MaterialPageRoute(builder: (context) => addEvent4()));
+          },
+          child: Text("Continuer"),
+        ),
+      ],
+    ),
+  );
+}
+
+
   @override
   Widget build(BuildContext context) {
     var ticketData = Provider.of<tycketData>(context);
 
-
     return Consumer<tycketData>(
       builder: (context, value, child) => Scaffold(
-      resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.payment , color: Colors.indigo[900],),
+                Icon(Icons.payment, color: Colors.indigo[900]),
                 Text(
-                "billeterie",
-                style: TextStyle(
-                  color: Colors.indigo[900],
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
+                  "billeterie",
+                  style: TextStyle(
+                    color: Colors.indigo[900],
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),] 
+              ],
             ),
           ),
         ),
@@ -205,7 +259,7 @@ void addNewTycket() {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    " vous pouvez ajouter des ticket a votre evenment ici , si vous laissez la section vide , elle sera consideré comme gratuite",
+                    "Vous pouvez ajouter des tickets à votre événement ici. Si vous laissez la section vide, elle sera considérée comme gratuite.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.grey,
@@ -224,91 +278,87 @@ void addNewTycket() {
                     padding: EdgeInsets.symmetric(horizontal: 0),
                     height: 250,
                     child: ListView.builder(
-                        itemCount: value.getAlltycket().length,
-                        itemBuilder: (context, index) => Card(
-                          elevation: 1,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 5 , horizontal: 10),
-                             // Ajoutez un padding seulement à droite
-                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                 Text(
-                                  value.getAlltycket()[index].name,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.indigo[900],
-                                  ),
+                      itemCount: value.getAlltycket().length,
+                      itemBuilder: (context, index) => Card(
+                        elevation: 1,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                value.getAlltycket()[index].name,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.indigo[900],
                                 ),
-                                Container(
-                                  child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              'Prix: ${value.getAlltycket()[index].price} FCFA',
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.grey[800],
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(width: 10,) ,
-                                          Expanded(
-                                            child: Text(
-                                              'Quantité: ${value.getAlltycket()[index].quantity}',
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.grey.shade800,
-                                              ),
-                                            ),
-                                          ),
-                                          IconButton(
-                                            icon: Icon(Icons.delete, color: Colors.grey.shade900),
-                                            onPressed: (){
-                                                Provider.of<tycketData>(context, listen: false).deletetycket(value.getAlltycket()[index]);
-                                                createdTickets.remove(value.getAlltycket()[index]);
-                                            }
-                                          ),
-                                          
-                                        ],
-                                  )
-                                )
-                              ],
-                             ),
-                            
+                              ),
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        'Prix: ${value.getAlltycket()[index].price} FCFA',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey[800],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      child: Text(
+                                        'Quantité: ${value.getAlltycket()[index].quantity}',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey.shade800,
+                                        ),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.delete, color: Colors.grey.shade900),
+                                      onPressed: () {
+                                        Provider.of<tycketData>(context, listen: false).deletetycket(value.getAlltycket()[index]);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-
+                    ),
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: isTicketLimitReached(ticketData.getAlltycket())?SizedBox.shrink()
-                  :GestureDetector(
-                    onTap: addNewTycket,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                      ),
-                      alignment: Alignment(1, 0.7),
-                      child: Container(
-                        padding: EdgeInsets.all(3),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.indigo[900],
+                  child: isTicketLimitReached(ticketData.getAlltycket())
+                      ? SizedBox.shrink()
+                      : GestureDetector(
+                          onTap: addNewTycket,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                            ),
+                            alignment: Alignment(1, 0.7),
+                            child: Container(
+                              padding: EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.indigo[900],
+                              ),
+                              child: Icon(Icons.add, color: Colors.white, size: 30),
+                            ),
+                          ),
                         ),
-                        child: Icon(Icons.add, color: Colors.white, size: 30),
-                      ),
-                    ),
-                  ),
                 ),
                 Expanded(
                   child: Stack(
@@ -321,23 +371,15 @@ void addNewTycket() {
                           alignment: Alignment.bottomCenter,
                           child: GestureDetector(
                             onTap: () {
-                            Navigator.push(
-                              context , MaterialPageRoute(builder: (context)=> addEvent4(
-                                    image: widget.image,
-                                    videoFile: _videoFile,
-                                    videoPlayerController: _videoPlayerController,
-                                    eventName: widget.eventName,
-                                    eventDescription: widget.eventDescription,
-                                    eventDate: widget.eventDate ,
-                                    eventStartTime: widget.eventStartTime,
-                                    eventLocation:widget.eventLocation,
-                                    eventEndTime:widget.eventEndTime,
-                                    createdTickets: createdTickets, // Passer la liste des tickets créés
+                            if(ticketData.isEventFree()){
+                              print("gratuit");
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => addEvent4()));
+                             }
+                             else{
+                                 showPercentageAlert(ticketData.getAlltycket());
+                             }
 
-
-                              ))
-                            );
-                          },
+                            },
                             child: Container(
                               decoration: BoxDecoration(
                                 color: Colors.indigo[900],
@@ -365,36 +407,3 @@ void addNewTycket() {
     );
   }
 }
-// child: ListTile(
-        // title: Text(
-        //   value.getAlltycket()[index].name,
-        //   style: TextStyle(
-        //     fontSize: 16,
-        //     fontWeight: FontWeight.bold,
-        //     color: Colors.indigo[900],
-        //   ),
-        // ),
-        
-//         subtitle: Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          // children: [
-          //   Text(
-          //     'Prix: ${value.getAlltycket()[index].price} FCFA',
-          //     style: TextStyle(
-          //       fontSize: 12,
-          //       color: Colors.grey[800],
-          //     ),
-          //   ),
-          //   SizedBox(width: 25,),
-          //   Text(
-          //     'Quantité: ${value.getAlltycket()[index].quantity}',
-          //     style: TextStyle(
-          //       fontSize: 12,
-          //       color: Colors.grey.shade800,
-          //     ),
-          //   ),
-            
-          // ],
-//         ),
-        
-//       ),

@@ -9,22 +9,16 @@ import 'dart:typed_data';
 import 'package:video_player/video_player.dart';
 
 
+import 'package:my_event_app/models/eventmodel.dart';
+import 'package:provider/provider.dart';
+
+
 class addEvent2 extends StatefulWidget {
-  final String eventName;
-  final String eventDescription;
-  final String eventDate;
-  final String eventStartTime;
-  final String eventEndTime;
-  final String eventLocation ;
+  
 
   const addEvent2({
     Key? key,
-    required this.eventName,
-    required this.eventDescription,
-    required this.eventDate,
-    required this.eventStartTime,
-    required this.eventEndTime,
-    required this.eventLocation,
+  
   }) : super(key: key);
 
   @override
@@ -58,6 +52,7 @@ class _addEvent2State extends State<addEvent2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false, // mettez cette propriété à false pour éviter les overflow
       appBar: AppBar(
         title: Center(
           child: Text(
@@ -153,23 +148,16 @@ class _addEvent2State extends State<addEvent2> {
                 SizedBox(height: 30),
                
                  Container(
-                   
                       child: Container(
                         height: 100,
                         child: 
                              Expanded(
                           child: GestureDetector(
                             onTap: () {
+                              EventModel eventModel = Provider.of<EventModel>(context, listen: false);
+                              eventModel.setEventImage(selectedImage?.path ?? ''); // Assurez-vous de passer une chaîne à setEventImage
                               Navigator.push(
-                                context , MaterialPageRoute(builder: (context)=> addEvent3(
-                                      image: selectedImage,
-                                      eventName: widget.eventName,
-                                      eventDescription: widget.eventDescription,
-                                      eventDate: widget.eventDate ,
-                                      eventStartTime: widget.eventStartTime,
-                                      eventEndTime:widget.eventEndTime,
-                                      eventLocation : widget.eventLocation ,
-        
+                                context, MaterialPageRoute(builder: (context)=> addEvent3(
                                 ))
                               );
                             },
@@ -198,7 +186,6 @@ class _addEvent2State extends State<addEvent2> {
                         ),
         
                       ),
-                    
                   ),
             ],
           ),

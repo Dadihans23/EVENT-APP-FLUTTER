@@ -116,7 +116,6 @@ class _registerState extends State<register> {
                                                     prefixIcon: Icon(Icons.email),
                                                     controller: _emailController,
                                               
-                                              
                                                   ),
                                                   
                                               

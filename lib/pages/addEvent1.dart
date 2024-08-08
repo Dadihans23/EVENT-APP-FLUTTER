@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:my_event_app/models/eventmodel.dart';
 import 'package:my_event_app/pages/addEvent2.dart';
 import 'package:my_event_app/pages/addEventLoc.dart';
 import 'package:my_event_app/pages/sumary_screen.dart';
+
+import 'package:my_event_app/models/eventmodel.dart';
+import 'package:provider/provider.dart'; // Importe la classe de modèle
+
 
 class addEvent1 extends StatefulWidget {
   const addEvent1({Key? key}) : super(key: key);
@@ -382,16 +387,19 @@ class _addEvent1State extends State<addEvent1> {
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    if (_validateInputs()) {
+                    if (_validateInputs()) {   
+                      Provider.of<EventModel>(context, listen: false).setEventName(_name_controller.text);
+                      Provider.of<EventModel>(context, listen: false).setEventDescription(_description_controller.text);
+                      Provider.of<EventModel>(context, listen: false).setEventDate(_date_controller.text);
+                      Provider.of<EventModel>(context, listen: false).setEventDateiso(_dateTime);
+                      Provider.of<EventModel>(context, listen: false).setEventStartTime(_startTime_controller.text);
+                      Provider.of<EventModel>(context, listen: false).setEventEndTime(_endTime_controller.text);
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => AddEventLoc(
-                            eventName: _name_controller.text,
-                            eventDescription: _description_controller.text,
-                            eventDate: _date_controller.text,
-                            eventStartTime: _startTime_controller.text,
-                            eventEndTime: _endTime_controller.text,
+                          
                           ),
                         ),
                       );

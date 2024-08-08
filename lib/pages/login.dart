@@ -16,9 +16,13 @@ import 'package:my_event_app/pages/sumary_screen.dart';
 import 'package:my_event_app/pages/login.dart';
 import 'package:my_event_app/pages/register.dart';
 
-
+import 'package:my_event_app/models/authprovider.dart';
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:my_event_app/models/organizer.dart';
+
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -32,8 +36,109 @@ class Login extends StatefulWidget {
 bool isObscure =true;
 
 class _LoginState extends State<Login> {
+
   @override
   Widget build(BuildContext context) {
+
+ final auth =Provider.of<AuthProvider>(context);
+
+void _connexion() async {
+  String email = _emailController.text.trim();
+  String password = _passwordController.text.trim();
+
+  // Débogage : Afficher les valeurs des champs
+  print('Email: $email');
+  print('Password: $password');
+
+  if (email.isEmpty || password.isEmpty) {
+    _showErrorDialog("Veuillez remplir tous les champs.");
+    return;
+  }
+
+  // Vérification du format de l'email
+  RegExp emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  if (!emailRegExp.hasMatch(email)) {
+    _showErrorDialog("Veuillez entrer une adresse email valide.");
+    return;
+  }
+  
+   Map<String, dynamic> requestBody = {
+    'email': email,
+    'password':password
+    
+  };
+
+
+  // Convertir le corps de la requête en JSON
+  
+String jsonBody = json.encode(requestBody);
+  
+// Définir l'URL de ton API Django
+String apiUrl = 'http://192.168.159.151:8000/users/Login_organizer/';
+
+  // Enregistrer l'utilisateur, etc.
+
+try {
+  // Effectuer la requête POST
+  final response = await http.post(
+    Uri.parse(apiUrl),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonBody,
+  );
+     
+  // Décode la réponse en tant que JSON en spécifiant l'encodage des caractères
+  Map<String, dynamic> jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+
+  // Vérifier si la requête a réussi (code de statut 200)
+  if (response.statusCode == 200) {
+    // Vérifier si la réponse de l'API contient "success" à true
+    if (jsonResponse['success'] == true) {
+      print(jsonResponse['token']);
+      auth.setToken(jsonResponse['token']);
+
+      jsonResponse['success'] = false;
+
+      Organisateur organisateur = Organisateur.fromJson(jsonResponse['user']);
+      print(organisateur);
+
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondryAnimation) => HomePage(
+        
+          ),
+          transitionDuration: Duration(milliseconds: 400),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        ),
+      );
+    } else {
+      // Afficher le message d'erreur de l'API
+      _showErrorDialog(jsonResponse['message']);
+    }
+  } else {
+    // Traitement en cas d'échec
+    print('Échec de l\'inscription. Code de statut: ${response.statusCode}');
+     _showErrorDialog(jsonResponse['error']);
+
+  }
+} catch (error) {
+  // cas d'erreurs
+  print('Erreur lors de la requête POST: $error');
+}
+
+  // Enregistrer l'utilisateur, etc.
+}
+
+
+
+
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 37, 37, 37),
       body: SafeArea(
@@ -237,90 +342,6 @@ class _LoginState extends State<Login> {
     );
   }
   
-void _connexion() async {
-  String email = _emailController.text.trim();
-  String password = _passwordController.text.trim();
-
-  // Débogage : Afficher les valeurs des champs
-  print('Email: $email');
-  print('Password: $password');
-
-  if (email.isEmpty || password.isEmpty) {
-    _showErrorDialog("Veuillez remplir tous les champs.");
-    return;
-  }
-
-  // Vérification du format de l'email
-  RegExp emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-  if (!emailRegExp.hasMatch(email)) {
-    _showErrorDialog("Veuillez entrer une adresse email valide.");
-    return;
-  }
-  
-   Map<String, dynamic> requestBody = {
-    'email': email,
-    'password':password
-    
-  };
-
-
-  // Convertir le corps de la requête en JSON
-  
-String jsonBody = json.encode(requestBody);
-  
-// Définir l'URL de ton API Django
-String apiUrl = 'http://192.168.0.142:8000/users/Login_organizer';
-
-  // Enregistrer l'utilisateur, etc.
-
-try {
-  // Effectuer la requête POST
-  final response = await http.post(
-    Uri.parse(apiUrl),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonBody,
-  );
-     
-  // Décode la réponse en tant que JSON en spécifiant l'encodage des caractères
-  Map<String, dynamic> jsonResponse = json.decode(utf8.decode(response.bodyBytes));
-
-  // Vérifier si la requête a réussi (code de statut 200)
-  if (response.statusCode == 200) {
-    // Vérifier si la réponse de l'API contient "success" à true
-    if (jsonResponse['success'] == true) {
-      print("permier etape bien recu");
-      Navigator.push(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondryAnimation) => HomePage(
-        
-          ),
-          transitionDuration: Duration(milliseconds: 400),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
-        ),
-      );
-    } else {
-      // Afficher le message d'erreur de l'API
-      _showErrorDialog(jsonResponse['message']);
-    }
-  } else {
-    // Traitement en cas d'échec
-    print('Échec de l\'inscription. Code de statut: ${response.statusCode}');
-  }
-} catch (error) {
-  // cas d'erreurs
-  print('Erreur lors de la requête POST: $error');
-}
-
-  // Enregistrer l'utilisateur, etc.
-}
 
 void _showErrorDialog(String message) {
   showDialog(

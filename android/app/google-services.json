@@ -1,0 +1,48 @@
+{
+    "project_info": {
+      "project_number": "956036079130",
+      "project_id": "buuddiafrica",
+      "storage_bucket": "buuddiafrica.appspot.com"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:956036079130:android:8165c83e2e0d9fef05bba3",
+          "android_client_info": {
+            "package_name": "com.example.my_event_app"
+          }
+        },
+        "oauth_client": [],
+        "api_key": [
+          {
+            "current_key": "AIzaSyDO9YcSiO8wzDRkqTHeQeyroJNnqdspfdg"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": []
+          }
+        }
+      },
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:956036079130:android:c473c7c13aa4ce8005bba3",
+          "android_client_info": {
+            "package_name": "com.sixamtech.sixcash_user"
+          }
+        },
+        "oauth_client": [],
+        "api_key": [
+          {
+            "current_key": "AIzaSyDO9YcSiO8wzDRkqTHeQeyroJNnqdspfdg"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": []
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }

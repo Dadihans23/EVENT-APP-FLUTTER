@@ -3,22 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:my_event_app/models/places_concert.dart';
 import 'package:my_event_app/pages/addEvent2.dart';
-import 'package:my_event_app/pages/addEvent3.dart'; // Importez la classe AddEvent2
+import 'package:my_event_app/pages/addEvent3.dart';
 
+import 'package:my_event_app/models/eventmodel.dart';
+import 'package:provider/provider.dart';
 class AddEventLoc extends StatefulWidget {
-  final String eventName;
-  final String eventDescription;
-  final String eventDate;
-  final String eventStartTime;
-  final String eventEndTime;
+ 
 
   const AddEventLoc({
     Key? key,
-    required this.eventName,
-    required this.eventDescription,
-    required this.eventDate,
-    required this.eventStartTime,
-    required this.eventEndTime,
+   
   }) : super(key: key);
 
   @override
@@ -29,6 +23,9 @@ class _AddEventLocState extends State<AddEventLoc> {
   List<ConcertPlace> _filteredLocationOptions = [];
   bool _showOptions = false;
   bool _locationChosen = false; // Nouvelle variable pour suivre si une localisation a été choisie
+  ConcertPlace? _selectedLocation; // Ajoutez une variable pour stocker la localisation sélectionnée
+  String? full_location; // Nouvelle variable pour stocker toutes les infos de la localisation choisie
+
 
   @override
   Widget build(BuildContext context) {
@@ -125,11 +122,18 @@ class _AddEventLocState extends State<AddEventLoc> {
                                 _filteredLocationOptions[index];
                             return InkWell(
                               onTap: () {
+                               
                                 setState(() {
+                                  _selectedLocation = place; // Assigner la localisation sélectionnée à _selectedLocation
                                   _locationController.text = place.place;
+                                  full_location = "${place.place}, ${place.commune}, ${place.ville}";
                                   _showOptions = false;
                                   _locationChosen = true; // Mettre à jour la variable _locationChosen lorsque l'utilisateur choisit une localisation
                                 });
+
+                                print(place.ville);
+                                print(place) ;
+                                print(full_location);
                               },
                               child: Container(
                                   decoration: BoxDecoration(
@@ -169,20 +173,24 @@ class _AddEventLocState extends State<AddEventLoc> {
                 child: Center(
                   child: GestureDetector(
                     onTap: () {
-                      String selectedLocation = _locationController.text;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => addEvent2(
-                            eventName: widget.eventName,
-                            eventDescription: widget.eventDescription,
-                            eventDate: widget.eventDate,
-                            eventStartTime: widget.eventStartTime,
-                            eventEndTime: widget.eventEndTime,
-                            eventLocation: selectedLocation,
+                      // Récupérer la localisation sélectionnée
+                      ConcertPlace? selectedLocation = _selectedLocation;
+                      if (selectedLocation != null) {
+                        // Accéder au modèle EventModel
+                        EventModel eventModel = Provider.of<EventModel>(context, listen: false);
+                        // Mettre à jour la localisation dans le modèle
+                        eventModel.setEventLocation(selectedLocation);
+                        // Naviguer vers la prochaine étape
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => addEvent2(),
                           ),
-                        ),
-                      );
+                        );
+                      } else {
+                        print("issues");
+
+                      }
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 20),

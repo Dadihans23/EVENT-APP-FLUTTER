@@ -48,7 +48,7 @@ class DescriptionRow extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 0),
             child: IconButton(
               onPressed: onPressed,
-              icon: Icon(Icons.edit, color: Colors.white, size: 20),
+              icon: Icon(Icons.lock, color: Colors.white, size: 20),
             ),
           ),
         ],

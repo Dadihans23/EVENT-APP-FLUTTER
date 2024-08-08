@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:my_event_app/pages/home_page.dart';
 import 'package:my_event_app/components/descriptionrow.dart';
+import 'package:my_event_app/components/custom_updating_button.dart';
+
 import 'package:my_event_app/pages/test.dart';
 
+import 'package:provider/provider.dart';
+import 'package:my_event_app/models/organizer.dart';
 
 
 class ProfilePage extends StatelessWidget {
@@ -12,9 +16,15 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final organizer = Provider.of<Organisateur>(context);
+    // print(organizer.descriptionOrganisation);
+    final organizer = Provider.of<Organisateur>(context);
+    print("Nom de l'organisation : ${organizer.nomOrganisation}") ;
+    print(organizer.firstName);
+
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 37, 37, 37),
-     
       body: SafeArea(
         child: Column(
           children: [
@@ -26,7 +36,10 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>test()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => test()),
+                      );
                     },
                     child: Container(
                       height: 100,
@@ -35,13 +48,19 @@ class ProfilePage extends StatelessWidget {
                         color: Colors.black26,
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: AssetImage(
-                              "lib/images/inconu2.png"),
+                          image: AssetImage("lib/images/inconu2.png"),
                         ),
                       ),
                     ),
                   ),
-                  Text("username" , style:TextStyle(color: Colors.grey.shade300 , fontSize: 10, fontWeight: FontWeight.w700),)
+                  Text(
+                    "username",
+                    style: TextStyle(
+                      color: Colors.grey.shade300,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -50,101 +69,138 @@ class ProfilePage extends StatelessWidget {
             ),
             Expanded(
               child: Container(
-                width: MediaQuery.of(context).size.width*1,
-                child: 
-                  SingleChildScrollView(
-                    physics: BouncingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 30 , vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                width: MediaQuery.of(context).size.width,
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Description" , style: TextStyle(color: Colors.white , fontSize: 13 ,fontWeight: FontWeight.bold ),),
-                            Icon(Icons.edit , color: Colors.white, size: 20, )
+                            Column(
+                              children: [
 
+                                CustomDescription(
+                                  title: "Description",
+                                  description: "bravo",
+                                  onEdit: () {
+                                    // Action à effectuer lorsque l'icône est cliquée
+                                  },
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "contact",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.edit,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 15),
+                                      Text(
+                                        "hello toi go to school with his brother, sa maman",
+                                        style: TextStyle(
+                                          color: Colors.grey.shade600,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
-
                         ),
-                        SizedBox(height: 15,),
-
-                        Text("hello toi go to school with his brother , sa maman " , style: TextStyle(color: Colors.grey.shade600 , fontSize: 13 ,fontWeight: FontWeight.w500 ),),
-                      ],
-                    ),
-                  ) ,
-                  Divider(
-                    color: Colors.grey.shade800,
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 25 , vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                          child: Text("Editer profile" ,style: TextStyle(color: Colors.indigo[700] , fontSize: 18 ,fontWeight: FontWeight.w600  , fontFamily:AutofillHints.telephoneNumber)),
+                      ),
+                      Divider(
+                        color: Colors.grey.shade800,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              child: Text(
+                                "Editer profile",
+                                style: TextStyle(
+                                  color: Colors.indigo[700],
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: AutofillHints.telephoneNumber,
+                                ),
+                              ),
+                            ),
+                            DescriptionRow(
+                              descriptionTitle: "Nom",
+                              descriptionText: "mcjnencjqcjn",
+                              onPressed: () {
+                                // Action à effectuer lorsque l'icône est cliquée
+                              },
+                            ),
+                            DescriptionRow(
+                              descriptionTitle: "Prenom",
+                              descriptionText: "mcjnencjqcjn",
+                              onPressed: () {
+                                // Action à effectuer lorsque l'icône est cliquée
+                              },
+                            ),
+                            DescriptionRow(
+                              descriptionTitle: "email",
+                              descriptionText: "mcjnencjqcjn",
+                              onPressed: () {
+                                // Action à effectuer lorsque l'icône est cliquée
+                              },
+                            ),
+                            DescriptionRow(
+                              descriptionTitle: "Telephone",
+                              descriptionText: "mcjnencjqcjn",
+                              onPressed: () {
+                                // Action à effectuer lorsque l'icône est cliquée
+                              },
+                            ),
+                          ],
                         ),
-
-                        DescriptionRow(
-                          descriptionTitle: "Nom",
-                          descriptionText: "mcjnencjqcjn",
-                          onPressed: () {
-                            // Action à effectuer lorsque l'icône est cliquée
-                          },
-                        ),
-                         DescriptionRow(
-                          descriptionTitle: "Prenom",
-                          descriptionText: "mcjnencjqcjn",
-                          onPressed: () {
-                            // Action à effectuer lorsque l'icône est cliquée
-                          },
-                        ),
-                         DescriptionRow(
-                          descriptionTitle: "email",
-                          descriptionText: "mcjnencjqcjn",
-                          onPressed: () {
-                            // Action à effectuer lorsque l'icône est cliquée
-                          },
-                        ),
-                         DescriptionRow(
-                          descriptionTitle: "Telephone",
-                          descriptionText: "mcjnencjqcjn",
-                          onPressed: () {
-                            // Action à effectuer lorsque l'icône est cliquée
-                          },
-                        ),
-                         DescriptionRow(
-                          descriptionTitle: "Mot de passe ",
-                          descriptionText: "mcjnencjqcjn",
-                          onPressed: () {
-                            // Action à effectuer lorsque l'icône est cliquée
-                          },
-                        ),
-                        
-                        
-
-                      ],
-                    ),
-                  ) ,
-                    Divider(
-                    color: Colors.grey.shade800,
-                  ),
-
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 25 , vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                          child: Text("Confidentialité" ,style: TextStyle(color: Colors.indigo[700], fontSize: 18 ,fontWeight: FontWeight.w600  , fontFamily:AutofillHints.telephoneNumber)),
-                        ),
-                       Padding(
+                      ),
+                      Divider(
+                        color: Colors.grey.shade800,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              child: Text(
+                                "Confidentialité",
+                                style: TextStyle(
+                                  color: Colors.indigo[700],
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: AutofillHints.telephoneNumber,
+                                ),
+                              ),
+                            ),
+                            Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -160,18 +216,17 @@ class ProfilePage extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                
                                   Container(
                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                     child: IconButton(
-                                      onPressed: (){},
+                                      onPressed: () {},
                                       icon: Icon(Icons.next_plan_sharp, color: Colors.white, size: 20),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                              Padding(
+                            Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -187,30 +242,28 @@ class ProfilePage extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                
                                   Container(
                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                     child: IconButton(
-                                      onPressed: (){},
+                                      onPressed: () {},
                                       icon: Icon(Icons.next_plan_sharp, color: Colors.white, size: 20),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                        
-                      ],
-                    ),
-                  ) ,
-                     Divider(
-                    color: Colors.grey.shade800,
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 25 , vertical: 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                              Padding(
+                          ],
+                        ),
+                      ),
+                      Divider(
+                        color: Colors.grey.shade800,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -226,34 +279,27 @@ class ProfilePage extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                
                                   Container(
                                     padding: EdgeInsets.symmetric(horizontal: 0),
                                     child: IconButton(
-                                      onPressed: (){},
+                                      onPressed: () {},
                                       icon: Icon(Icons.next_plan_sharp, color: Colors.white, size: 20),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                        
-                      ],
-                    ),
-                  ) ,
-
-
-                ],
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
-              ),
-            )
-            
           ],
         ),
-
-      )
-    ) ;
+      ),
+    );
   }
 }
-

@@ -1,10 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'places_concert.dart'; // Import de la classe ConcertPlace
 
+
 class EventModel extends ChangeNotifier {
   String _eventName = '';
   String _eventDescription = '';
   String _eventDate = '';
+  DateTime _eventDateiso = DateTime.now(); // Modifier le type de _eventDate en DateTime
   String _eventStartTime = '';
   String _eventEndTime = '';
   ConcertPlace? _eventLocation; // Utilisation de ConcertPlace comme type pour la localisation
@@ -14,6 +16,8 @@ class EventModel extends ChangeNotifier {
   String get eventName => _eventName;
   String get eventDescription => _eventDescription;
   String get eventDate => _eventDate;
+  DateTime get eventDateIso => _eventDateiso;
+
   String get eventStartTime => _eventStartTime;
   String get eventEndTime => _eventEndTime;
   ConcertPlace? get eventLocation => _eventLocation; // Accesseur pour la localisation de l'événement
@@ -55,13 +59,46 @@ class EventModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addTicket(TicketItem ticket) {
-    _tickets.add(ticket);
-    notifyListeners();
+  void addTickets(List<TicketItem> tickets) {
+    _tickets.addAll(tickets);
+    notifyListeners(); // Ajoutez cette ligne pour notifier les écouteurs du changement dans la liste des billets
   }
 
   void removeTicket(TicketItem ticket) {
     _tickets.remove(ticket);
+    notifyListeners();
+  }
+
+    void setEventDateiso(DateTime date) {
+    _eventDateiso = date;
+    notifyListeners();
+  }
+
+  List<Map<String, dynamic>> generateTicketTypes() {
+    List<Map<String, dynamic>> ticketTypes = [];
+
+    // Parcourez la liste des billets créés et générez les données pour chaque billet
+    for (TicketItem ticket in _tickets) {
+      Map<String, dynamic> ticketData = {
+        "name": ticket.name,
+        "price": double.parse(ticket.price), // Convertissez le prix en double
+        "quantity_available": int.parse(ticket.quantity) // Convertissez la quantité en entier
+      };
+      ticketTypes.add(ticketData);
+    }
+
+    return ticketTypes;
+  }
+
+   void clearEventData() {
+    _eventName = '';
+    _eventDescription = '';
+    _eventDate = '';
+    _eventStartTime = '';
+    _eventEndTime = '';
+    _eventLocation = null;
+    _eventImage = null;
+    _tickets.clear();
     notifyListeners();
   }
 }

@@ -10,6 +10,10 @@ class AuthProvider extends ChangeNotifier {
     _token = token;
     notifyListeners();
   }
+  void clearToken(){
+    _token = null;
+    notifyListeners();
+  }
 
   // Fonction pour récupérer le token
   String? getToken() {

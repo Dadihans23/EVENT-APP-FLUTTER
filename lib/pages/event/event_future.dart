@@ -13,6 +13,8 @@ import 'package:intl/date_symbol_data_local.dart'; // Importez les données de s
 import 'package:provider/provider.dart';
 
 import 'package:my_event_app/models/authprovider.dart';
+import 'package:my_event_app/models/organizer.dart';
+
 import 'package:my_event_app/data/ticket_data.dart';
 
 import 'package:my_event_app/models/eventmodel.dart';
@@ -33,29 +35,22 @@ class _FutureEventState extends State<FutureEvent> {
 
   @override
   Widget build(BuildContext context) {
+
+    final organisateur = Provider.of<Organisateur>(context);
     final auth = Provider.of<AuthProvider>(context);
-    // String? token = auth.getToken();
-     String? token = "9d017e10c2a8f78c793a64522b1a23d616b6cc8a";
-    String url = 'http://192.168.30.151:8000/';
+    String? token = auth.getToken();
+    String adresse = '192.168.109.151'; 
+    
+    
 
     Future<List<Event>> fetchEvents(String token) async {
       final response = await http.get(
-        Uri.parse('http://192.168.159.151:8000/users/events_by_user/upcoming/'),
+        Uri.parse('http://$adresse:8000/users/events_by_user/upcoming/'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Token $token',
         },
       );
-
-      // if (response.statusCode == 200) {
-
-      //   List<dynamic> jsonResponse = json.decode(response.body);
-      //   print(' voila token la ici'+token);
-      //   print(jsonResponse);
-      //   return jsonResponse.map((event) => Event.fromJson(event)).toList();
-      // } else {
-      //   throw Exception('Failed to load events');
-      // }
       if (response.statusCode == 200) {
         String responseBody = utf8.decode(response.bodyBytes); // Décode en UTF-8
         List<dynamic> jsonResponse = json.decode(responseBody);
@@ -103,7 +98,7 @@ class _FutureEventState extends State<FutureEvent> {
                 print(snapshot.error);
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text('No events found'));
+                return Center(child: Text(" PAS ENCORE D'EVENEMENT "));
               } else {
                 List<Event> events = snapshot.data!;
                 return ListView.builder(
@@ -118,7 +113,7 @@ class _FutureEventState extends State<FutureEvent> {
                     return GestureDetector(
                          onTap: () {
                             navigateToEventDetails(context, event);
-                      },
+                        },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         child: Stack(
@@ -130,7 +125,7 @@ class _FutureEventState extends State<FutureEvent> {
                                 borderRadius: BorderRadius.circular(30),
                                  image: event.image != null
                                     ? DecorationImage(
-                                        image: NetworkImage(event.image!),
+                                        image: NetworkImage("http://$adresse:8000${event.image!}"),
                                         fit: BoxFit.cover,
                                       )
                                     : DecorationImage(

@@ -16,12 +16,14 @@ import 'package:my_event_app/pages/sumary_screen.dart';
 import 'package:my_event_app/pages/login.dart';
 import 'package:my_event_app/pages/register.dart';
 
-import 'package:my_event_app/models/authprovider.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+
 import 'package:my_event_app/models/organizer.dart';
+import 'package:my_event_app/models/authprovider.dart';
+
 
 
 class Login extends StatefulWidget {
@@ -39,8 +41,9 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-
+ final adresse = '192.168.109.151' ;
  final auth =Provider.of<AuthProvider>(context);
+ final organisateur =Provider.of<Organisateur>(context);
 
 void _connexion() async {
   String email = _emailController.text.trim();
@@ -74,7 +77,7 @@ void _connexion() async {
 String jsonBody = json.encode(requestBody);
   
 // Définir l'URL de ton API Django
-String apiUrl = 'http://192.168.159.151:8000/users/Login_organizer/';
+String apiUrl = 'http://${adresse}:8000/users/Login_organizer/';
 
   // Enregistrer l'utilisateur, etc.
 
@@ -100,8 +103,13 @@ try {
 
       jsonResponse['success'] = false;
 
-      Organisateur organisateur = Organisateur.fromJson(jsonResponse['user']);
-      print(organisateur);
+
+      // print(jsonResponse['user']);
+      // Organisateur organisateur = Organisateur.fromJson(jsonResponse['user']);
+      // print('organisateur : ${organisateur.email}');
+
+      Provider.of<Organisateur>(context, listen: false).updateFromMap(jsonResponse['user']);        
+      
 
       Navigator.push(
         context,

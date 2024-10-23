@@ -53,6 +53,9 @@ class Event {
   final String totalEarningsByDeveloper;
   final int views;
   final int organizer;
+  final int favorite_count ;
+  final int comment_count ;
+
 
   Event({
     required this.id,
@@ -74,7 +77,10 @@ class Event {
     required this.totalEarningsByCategoryByDeveloper,
     required this.totalEarningsByDeveloper,
     required this.views,
+    required this.favorite_count,
+    required this.comment_count,
     required this.organizer,
+    res
   });
 
   factory Event.fromJson(Map<String, dynamic> json) {
@@ -103,6 +109,8 @@ class Event {
       totalEarningsByDeveloper: json['total_earnings_by_developer'],
       views: json['views'],
       organizer: json['organizer'],
+      favorite_count: json['favorite_count'],
+      comment_count: json['comment_count'],
     );
   }
 }

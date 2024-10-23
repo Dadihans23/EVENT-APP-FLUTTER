@@ -39,9 +39,9 @@ class EventDetailsPage extends StatelessWidget {
                     height: MediaQuery.of(context).size.height * 0.50,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        
-                        image: NetworkImage("http://192.168.1.15:8000${event.image}"), // Utilisez l'image de l'événement
+                        image: NetworkImage("http://192.168.160.151:8000${event.image!}"), // Utilisez l'image de l'événement
                         fit: BoxFit.cover,
+
                       ),
                     ),
                   ),

@@ -55,6 +55,7 @@ import 'package:my_event_app/pages/home_page.dart';
 import 'package:my_event_app/pages/intro.dart';
 import 'package:my_event_app/pages/login.dart';
 import 'package:my_event_app/pages/register.dart';
+import 'package:my_event_app/pages/reportingpage.dart';
 import 'package:provider/provider.dart';
 import 'package:my_event_app/pages/addEvent3.dart';
 import 'package:my_event_app/pages/register.dart';
@@ -81,7 +82,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: Intro(),
       // Ajoute ici d'autres configurations de MaterialApp si nécessaire
     );
   }

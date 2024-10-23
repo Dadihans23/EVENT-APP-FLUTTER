@@ -9,6 +9,9 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:my_event_app/pages/event_page.dart';
 import 'package:my_event_app/pages/favorites.dart';
 import 'package:my_event_app/pages/profile.dart';
+import 'package:my_event_app/pages/stat/statglobal.dart';
+
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,8 +24,8 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   final List<Widget> _pages = [
     EventPage() ,
-    FavoritesPage(), 
-    ProfilePage()
+    GlobalStat(),
+    ProfilePage(),
 
   ];
 
@@ -59,8 +62,8 @@ class _HomePageState extends State<HomePage> {
                 text: 'Event',
               ),
               GButton(
-                icon: Icons.favorite_border_rounded,
-                text: 'Favorite',
+                icon: Icons.query_stats ,
+                text: 'Statistique',
               ),
               GButton(
                 icon: Icons.verified_user,

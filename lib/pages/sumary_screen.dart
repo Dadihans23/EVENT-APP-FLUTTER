@@ -16,6 +16,13 @@ import 'dart:convert';
 
 import 'package:provider/provider.dart';
 
+
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+
+import 'package:my_event_app/models/organizer.dart';
+import 'package:my_event_app/models/authprovider.dart';
+
 class Register3 extends StatefulWidget {
   final String email;
   final String password;
@@ -209,7 +216,7 @@ void _createuser() async {
   String password = widget.password;
 
   // Création d'un objet de requête multipart
-  var request = http.MultipartRequest('POST', Uri.parse('http://192.168.0.142:8000/users/Register_organizer/'));
+  var request = http.MultipartRequest('POST', Uri.parse('http://192.168.131.151:8000/users/Register_organizer/'));
 
   // Ajout des données texte à la requête
   request.fields['description'] = description;
@@ -221,6 +228,7 @@ void _createuser() async {
   request.fields['telephone'] = telephone;
   request.fields['password'] = password;
 
+  
   // Ajout de l'image à la requête si elle a été sélectionnée
 if (selectedImage != null) {
   bool fileExists = await selectedImage!.exists();
@@ -234,7 +242,9 @@ if (selectedImage != null) {
   print('Aucune image sélectionnée.');
 }
 
-final auth = Provider.of<AuthProvider>(context);
+
+
+  final auth = Provider.of<AuthProvider>(context, listen: false);
 
   // Envoi de la requête et gestion de la réponse
   try {
@@ -249,8 +259,12 @@ final auth = Provider.of<AuthProvider>(context);
             
             // Récupérer le token de la réponse
             var token = jsonData['token'];
-            print(token);
+            print(jsonData["user"]);
             auth.setToken(token);
+            
+            Provider.of<Organisateur>(context, listen: false).updateFromMap(jsonData['user']);        
+
+            Navigator.push(context, MaterialPageRoute(builder: (context )=> HomePage())) ;
 
 
 

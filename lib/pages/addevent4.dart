@@ -52,9 +52,10 @@ class _addEvent4State extends State<addEvent4> {
 
 Future<void> _uploadImage(int eventId) async {
   String? token = auth.getToken();  // Remplacez par le token de l'utilisateur
+  String adresse = '192.168.109.151' ;
 
   // Construire le corps de la requête pour envoyer l'image
-  var request = http.MultipartRequest('POST', Uri.parse('http://192.168.30.151:8000/users/addimage/'));
+  var request = http.MultipartRequest('POST', Uri.parse('http://$adresse:8000/users/addimage/'));
   request.headers['Authorization'] = 'Token $token';
   request.fields['event_id'] = eventId.toString();
   
@@ -95,10 +96,11 @@ void _createEvent() async {
 
   // Convertir le corps de la requête en JSON
   String jsonBody = json.encode(requestBody);
+  
+  String adresse = '192.168.109.151' ;
 
   // Définir l'URL de ton API Django pour créer l'événement
-  String apiUrl = 'http://192.168.30.151:8000/users/organisateur_create_event/';
-  print(eventModel.eventDateIso.toIso8601String()) ;
+  String apiUrl = 'http://$adresse:8000/users/organisateur_create_event/';
 
   try {
     // Effectuer la requête POST pour créer l'événement

@@ -68,7 +68,7 @@ class _EventPageState extends State<EventPage> {
               Expanded(
                 child: TabBarView(children: [
                    FutureEvent() ,
-                  past_event() ,
+                   past_event() ,
                 
                 
                    
